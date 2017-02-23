@@ -6,7 +6,7 @@
 		<version>0.0.2</version>
 	</parent>
 	<artifactId>common-db</artifactId>
-	<version>0.0.5-SNAPSHOT</version>
+	<version>0.0.6-SNAPSHOT</version>
 	
 	<properties>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
