@@ -6,7 +6,7 @@
 		<version>0.0.2</version>
 	</parent>
 	<artifactId>common-db</artifactId>
-	<version>0.0.4</version>
+	<version>0.0.5-SNAPSHOT</version>
 	
 	<properties>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
@@ -15,7 +15,7 @@
 	<scm>
 		<connection>${scm.base}${project.artifactId}.git</connection>
 		<developerConnection>${scm.base}${project.artifactId}.git</developerConnection>
-  	  <tag>common-db-0.0.4</tag>
+  	  <tag>HEAD</tag>
   </scm>
   	
 	<dependencies>
