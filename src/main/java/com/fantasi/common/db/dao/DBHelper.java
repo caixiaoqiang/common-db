@@ -65,6 +65,33 @@ public class DBHelper {
 		
 		return -1;
 	}
+	public static String queryForString(Connection conn, String sql, String[] params) throws SQLException {
+		ResultSet rs = null;
+		PreparedStatement stat = null;
+		try {
+			logger.debug("query,sql=" + sql);
+			stat = conn.prepareStatement(sql);
+			if (params != null) {
+				int index = 1;
+				for (String param : params) {
+					stat.setString(index++, param);
+				}
+			}
+			rs = stat.executeQuery();
+			if (rs.next()) {
+				return rs.getString(1);
+			}
+		} finally {
+			if (stat != null) {
+				stat.close();
+			}
+			if (rs != null) {
+				rs.close();
+			}
+		}
+
+		return null;
+	}
 	
 	public static long queryForLong(Connection conn, String sql, String[] params) throws SQLException {
 		ResultSet rs = null;

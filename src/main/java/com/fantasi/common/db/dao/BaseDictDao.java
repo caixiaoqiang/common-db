@@ -147,7 +147,11 @@ public class BaseDictDao extends BaseTableDao {
 	public Map<String, String> queryForMap(Connection conn, String whereClause, String[] params) throws SQLException {
 		return this.queryTableForMap(conn, this.tableName, whereClause, params);
 	}
-	
+
+	public int queryForInt(String field, String where, String[] params) {
+		return queryTableForInt(this.tableName, field, null, where, params);
+	}
+
 	public int queryForInt(String field, List<Filter> filters, String where, String[] params) {
 		return queryTableForInt(this.tableName, field, filters, where, params);
 	}
@@ -171,7 +175,19 @@ public class BaseDictDao extends BaseTableDao {
 	public long queryForLong(Connection conn, String field, List<Filter> filters, String where, String[] params) throws SQLException {
 		return queryTableForLong(conn, this.tableName, field, filters, where, params);
 	}
-	
+
+	public String queryForString(String field, String where, String[] params) {
+		return queryTableForString(this.tableName, field, null, where, params);
+	}
+
+	public String queryForString(String field, List<Filter> filters, String where, String[] params) {
+		return queryTableForString(this.tableName, field, filters, where, params);
+	}
+
+	public String queryForString(Connection conn, String field, List<Filter> filters, String where, String[] params) throws SQLException {
+		return queryTableForString(conn, this.tableName, field, filters, where, params);
+	}
+
 	public int queryCount(List<Filter> filters) {
 		return this.queryTableCount(this.tableName, filters, null, null);
 	}

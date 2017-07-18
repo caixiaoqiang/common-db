@@ -520,45 +520,35 @@ public class BaseTableDao extends BaseDao {
 	}
 	
 	public int queryTableForInt(String table, String field, List<Filter> filters, String where, String[] params) {
-		Connection conn = null;
-		try {
-			conn = pool.getConnection();
-			return this.queryTableForInt(conn, table, field, filters, where, params);
-		} catch (Exception e) {
-			logger.error("queryTableForInt错误:" + e.getLocalizedMessage());
-			printCallStack(e);
-		} finally {
-			try {
-				if (conn != null) {
-					conn.close();
-					conn = null;
-				}
-			} catch (SQLException e) {
-				//关闭数据库连接的时候出现异常了
-			}
-		}
-		return -1;
+		SelectParam sp = getSelectParam(filters, where, params);
+		String sql = "select " + field + " from " +
+				table + sp.getWhereClause();
+		return this.rawQueryForInt(sql, sp.getParams());
 	}
+
+	public String queryTableForString(String table, String field, String where, String[] params) {
+		return this.queryTableForString(table, field, null, where, params);
+	}
+
+	public String queryTableForString(String table, String field, List<Filter> filters, String where, String[] params) {
+		SelectParam sp = getSelectParam(filters, where, params);
+		String sql = "select " + field + " from " +
+				table + sp.getWhereClause();
+		return this.rawQueryForString(sql, sp.getParams());
+	}
+
+    public String queryTableForString(Connection conn, String table, String field, List<Filter> filters, String where, String[] params) throws SQLException {
+        SelectParam sp = getSelectParam(filters, where, params);
+        String sql = "select " + field + " from " +
+                table + sp.getWhereClause();
+        return DBHelper.queryForString(conn, sql, sp.getParams());
+    }
 	
 	public int queryTableForInt(String table, String field, String where, String[] params, Filter filter) {
-		Connection conn = null;
-		try {
-			conn = pool.getConnection();
-			return this.queryTableForInt(conn, table, field, where, params, filter);
-		} catch (Exception e) {
-			logger.error("queryTableForInt错误:" + e.getLocalizedMessage());
-			printCallStack(e);
-		} finally {
-			try {
-				if (conn != null) {
-					conn.close();
-					conn = null;
-				}
-			} catch (SQLException e) {
-				//关闭数据库连接的时候出现异常了
-			}
-		}
-		return -1;
+		SelectParam sp = getSelectParam(filter, where, params);
+		String sql = "select " + field + " from " +
+				table + sp.getWhereClause();
+		return this.rawQueryForInt(sql, sp.getParams());
 	}
 	
 	public int queryTableForInt(Connection conn, String table, String field, List<Filter> filters, String where, String[] params) throws SQLException {
@@ -584,24 +574,10 @@ public class BaseTableDao extends BaseDao {
 	}
 	
 	public long queryTableForLong(String table, String field, List<Filter> filters, String where, String[] params) {
-		Connection conn = null;
-		try {
-			conn = pool.getConnection();
-			return this.queryTableForLong(conn, table, field, filters, where, params);
-		} catch (Exception e) {
-			logger.error("queryTableForInt错误:" + e.getLocalizedMessage());
-			printCallStack(e);
-		} finally {
-			try {
-				if (conn != null) {
-					conn.close();
-					conn = null;
-				}
-			} catch (SQLException e) {
-				//关闭数据库连接的时候出现异常了
-			}
-		}
-		return -1;
+		SelectParam sp = getSelectParam(filters, where, params);
+		String sql = "select " + field + " from " +
+				table + sp.getWhereClause();
+		return this.rawQueryForLong(sql, sp.getParams());
 	}
 	
 	public long queryTableForLong(Connection conn, String table, String field, List<Filter> filters, String where, String[] params) throws SQLException {
@@ -612,45 +588,17 @@ public class BaseTableDao extends BaseDao {
 	}
 	
 	public int queryTableCount(String table, List<Filter> filters, String where, String[] params) {
-		Connection conn = null;
-		try {
-			conn = pool.getConnection();
-			return this.queryTableCount(conn, table, filters, where, params);
-		} catch (Exception e) {
-			logger.error("queryTableCount错误:" + e.getLocalizedMessage());
-			printCallStack(e);
-		} finally {
-			try {
-				if (conn != null) {
-					conn.close();
-					conn = null;
-				}
-			} catch (SQLException e) {
-				//关闭数据库连接的时候出现异常了
-			}
-		}
-		return -1;
+		SelectParam sp = getSelectParam(filters, where, params);
+		String sql = "select count(*) from " +
+				table + sp.getWhereClause();
+		return this.rawQueryForInt(sql, sp.getParams());
 	}
 	
 	public int queryTableCount(String table, String where, String[] params, Filter filter) {
-		Connection conn = null;
-		try {
-			conn = pool.getConnection();
-			return this.queryTableCount(conn, table, where, params, filter);
-		} catch (Exception e) {
-			logger.error("queryTableCount错误:" + e.getLocalizedMessage());
-			printCallStack(e);
-		} finally {
-			try {
-				if (conn != null) {
-					conn.close();
-					conn = null;
-				}
-			} catch (SQLException e) {
-				//关闭数据库连接的时候出现异常了
-			}
-		}
-		return -1;
+		SelectParam sp = getSelectParam(filter, where, params);
+		String sql = "select count(*) from " +
+				table + sp.getWhereClause();
+		return this.rawQueryForInt(sql, sp.getParams());
 	}
 	
 	
@@ -697,85 +645,36 @@ public class BaseTableDao extends BaseDao {
 	
 	public List<Map<String, String>> queryTable(Connection conn, String table, String[] columns, List<Filter> filters, String where, String[] params,
 			String groupBy, String having, String orderBy, String limit) throws SQLException {
-		
-		
 		SelectParam sp = getSelectParam(filters, where, params);
-		String columnStr = getColumnStr(columns);
-		String groupByClause = getGroupByHaving(groupBy, having);
-		String orderByCluase = getOrderByClause(orderBy);
-		String limitByCluase = getLimitClause(limit);
-		
-		String sql = "select " + columnStr + " from " +
-				table + sp.getWhereClause() + groupByClause + orderByCluase + limitByCluase;
+		String sql = generateSql(table, columns, groupBy, having, orderBy, limit, sp);
+
 		return DBHelper.query(conn, sql, sp.getParams());
-		
 	}
 	
 	public List<Map<String, String>> queryTable(String table, String[] columns, List<Filter> filters, String where, String[] params,
 			String groupBy, String having, String orderBy, String limit) {
-		
-		
 		SelectParam sp = getSelectParam(filters, where, params);
-		String columnStr = getColumnStr(columns);
-		String groupByClause = getGroupByHaving(groupBy, having);
-		String orderByCluase = getOrderByClause(orderBy);
-		String limitByCluase = getLimitClause(limit);
-		
-		Connection conn = null;
-		try {
-			conn = pool.getConnection();
-			String sql = "select " + columnStr + " from " +
-					table + sp.getWhereClause() + groupByClause + orderByCluase + limitByCluase;
-			return DBHelper.query(conn, sql, sp.getParams());
-		}  catch (Exception e) {
-			logger.error("query错误:" + e.getLocalizedMessage());
-			printCallStack(e);
-		} finally {
-			try {
-				if (conn != null) {
-					conn.close();
-					conn = null;
-				}
-			} catch (SQLException e) {
-				//关闭数据库连接的时候出现异常了
-			}
-		}
-		return new ArrayList<Map<String,String>>();
+		String sql = generateSql(table, columns, groupBy, having, orderBy, limit, sp);
+		return this.rawQuery(sql, sp.getParams());
 	}
 	
 	public List<Map<String, String>> queryTable(String table, String[] columns, String where, String[] params, Filter filter,
 			String groupBy, String having, String orderBy, String limit) {
-		
-		
 		SelectParam sp = getSelectParam(filter, where, params);
+		String sql = generateSql(table, columns, groupBy, having, orderBy, limit, sp);
+		return this.rawQuery(sql, sp.getParams());
+	}
+
+	private String generateSql(String table, String[] columns, String groupBy, String having, String orderBy, String limit, SelectParam sp) {
 		String columnStr = getColumnStr(columns);
 		String groupByClause = getGroupByHaving(groupBy, having);
-		String orderByCluase = getOrderByClause(orderBy);
-		String limitByCluase = getLimitClause(limit);
-		
-		Connection conn = null;
-		try {
-			conn = pool.getConnection();
-			String sql = "select " + columnStr + " from " +
-					table + sp.getWhereClause() + groupByClause + orderByCluase + limitByCluase;
-			return DBHelper.query(conn, sql, sp.getParams());
-		}  catch (Exception e) {
-			logger.error("query错误:" + e.getLocalizedMessage());
-			printCallStack(e);
-		} finally {
-			try {
-				if (conn != null) {
-					conn.close();
-					conn = null;
-				}
-			} catch (SQLException e) {
-				//关闭数据库连接的时候出现异常了
-			}
-		}
-		return new ArrayList<Map<String,String>>();
+		String orderByClause = getOrderByClause(orderBy);
+		String limitByClause = getLimitClause(limit);
+
+		return "select " + columnStr + " from " +
+				table + sp.getWhereClause() + groupByClause + orderByClause + limitByClause;
 	}
-	
-	
+
 	private SelectParam getSelectParam(Filter filter, String where, String[] params) {
 		SelectParam sp = Filter.getFilterParams(filter);
 		sp.setWhereClause(getWhereClause(sp.getWhereClause(), where));

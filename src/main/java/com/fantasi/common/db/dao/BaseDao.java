@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.fantasi.common.db.annotation.ReadOnlyConnection;
 import org.apache.log4j.Logger;
 
 import com.fantasi.common.db.IDBPool;
@@ -100,6 +101,7 @@ public class BaseDao {
 	 * @param params
 	 * @return 当没有结果时返回 null
 	 */
+	@ReadOnlyConnection
 	public Map<String, String> rawQueryForMap(String sql, String[] params) {
 		List<Map<String, String>> list = this.rawQuery(sql, params);
 		if (list.size() > 0) {
@@ -123,6 +125,7 @@ public class BaseDao {
 	 * @param params
 	 * @return 当没有结果时返回 null
 	 */
+	@ReadOnlyConnection
 	public int rawQueryForInt(String sql, String[] params) {
 		Connection conn = null;
 		try {
@@ -143,6 +146,71 @@ public class BaseDao {
 		}
 		return -1;
 	}
+
+	/**
+	 * 查询
+	 * @param sql
+	 * @return 当没有结果时返回 null
+	 */
+	public long rawQueryForLong(String sql) {
+		return rawQueryForLong(sql, null);
+	}
+
+	/**
+	 * 查询
+	 * @param sql
+	 * @param params
+	 * @return 当没有结果时返回 null
+	 */
+	@ReadOnlyConnection
+	public long rawQueryForLong(String sql, String[] params) {
+		Connection conn = null;
+		try {
+			conn = this.pool.getConnection();
+			return DBHelper.queryForLong(conn, sql, params);
+		} catch (SQLException e) {
+			logger.error("rawQueryForInt错误:" + e.getLocalizedMessage());
+			printCallStack(e);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				//关闭数据库连接的时候出现异常了
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * 查询
+	 * @param sql
+	 * @param params
+	 * @return 当没有结果时返回 null
+	 */
+	@ReadOnlyConnection
+	public String rawQueryForString(String sql, String[] params) {
+		Connection conn = null;
+		try {
+			conn = this.pool.getConnection();
+			return DBHelper.queryForString(conn, sql, params);
+		} catch (SQLException e) {
+			logger.error("rawQueryForString:" + e.getLocalizedMessage());
+			printCallStack(e);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				//关闭数据库连接的时候出现异常了
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * 查询
@@ -159,6 +227,7 @@ public class BaseDao {
 	 * @param params
 	 * @return 当没有结果集时返回 null
 	 */
+	@ReadOnlyConnection
 	public List<Map<String, String>> rawQuery(String sql, String[] params) {
 		Connection conn = null;
 		try {
