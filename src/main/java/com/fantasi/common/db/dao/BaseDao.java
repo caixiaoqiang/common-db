@@ -29,7 +29,8 @@ public class BaseDao {
 	}
 	
 	
-	protected void printCallStack(Throwable e) {
+	protected void printCallStack(Exception e) {
+		this.pool.exceptionCallback(e);
 		 StackTraceElement[] stackElements = e.getStackTrace();
 		 StringBuffer sb = new StringBuffer();
 		 if (stackElements != null) {

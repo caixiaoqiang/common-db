@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by zhangyouce on 2017/6/8.
  */
-public class ReadWriteDBPool implements IDBPool{
+public class ReadWriteDBPool extends LoggerDBPool implements IDBPool{
 
     private DataSource writeDataSource = null;
     private List<DataSource> readDataSources = null;
@@ -45,6 +45,11 @@ public class ReadWriteDBPool implements IDBPool{
 
     @Override
     public void close() throws SQLException {
+
+    }
+
+    @Override
+    public void exceptionCallback(Exception e) {
 
     }
 }

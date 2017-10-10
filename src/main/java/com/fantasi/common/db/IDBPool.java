@@ -6,4 +6,5 @@ import java.sql.SQLException;
 public interface IDBPool {
 	public Connection getConnection() throws SQLException;
 	public void close() throws SQLException;
+	public void exceptionCallback(Exception e);
 }

@@ -50,6 +50,7 @@ public abstract class TransactionService {
 			
 			return t;
 		} catch (Exception e) {
+			pool.exceptionCallback(e);
 			if (conn != null) {
 				try {
 					conn.rollback();

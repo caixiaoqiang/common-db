@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
-public class DBPool implements IDBPool{
+public class DBPool extends LoggerDBPool implements IDBPool{
 	
 	private String connectURI;
 	private String username;
@@ -20,6 +20,7 @@ public class DBPool implements IDBPool{
 	private int maxWait = 10000;
 	
 	private DataSource dataSource = null;
+
 
 	public DataSource getDataSource() {
 		return dataSource;
@@ -77,9 +78,14 @@ public class DBPool implements IDBPool{
 	public void close() throws SQLException {
 		DriverManager.deregisterDriver(DriverManager.getDriver(connectURI));
 	}
-	
+
+
+
 	public String getConnectionInfo() {
 		BasicDataSource ds = (BasicDataSource)dataSource;
 		return "[" + ds.getNumActive() + "," + ds.getNumIdle() + "]";
 	}
+
+
+
 }
