@@ -12,10 +12,17 @@ public class SampleTransactionServiceTest extends TestCase {
 		
 		DBPool pool = new DBPool();
 		pool.init("com.mysql.jdbc.Driver",
-				"jdbc:mysql://localhost:3306/sample",
+				"jdbc:mysql://localhost:3306/test",
 				"root",
-				"admin");		
-		
+				"admin");
+
+		pool.setExceptionLogger(new DBPool.ExceptionLogger() {
+			public void log(Exception e) {
+				System.out.println("error:" + e);
+//                    logger.error(e);
+			}
+		});
+
 		SampleTransactionService service = new SampleTransactionService(pool);
 		
 		service.test();
