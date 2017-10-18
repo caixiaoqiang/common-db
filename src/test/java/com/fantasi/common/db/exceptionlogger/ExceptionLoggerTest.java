@@ -31,9 +31,10 @@ public class ExceptionLoggerTest  extends TestCase {
 
 
             pool.setExceptionLogger(new DBPool.ExceptionLogger() {
-                public void log(Exception e) {
+                @Override
+                public void log(Exception e, String position, String sql, String params) {
                     System.out.println(e);
-//                    logger.error(e);
+                    System.out.println(position);
                 }
             });
 

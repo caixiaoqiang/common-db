@@ -10,7 +10,7 @@ public abstract class LoggerDBPool implements IDBPool{
     }
 
     public interface IDBExceptionLogger {
-        void log(Exception e);
+        void log(Exception e, String position, String sql, String params);
     }
 
     public static abstract class ExceptionLogger implements IDBExceptionLogger {
@@ -18,9 +18,9 @@ public abstract class LoggerDBPool implements IDBPool{
     }
 
     @Override
-    public void exceptionCallback(Exception e) {
+    public void exceptionCallback(Exception e, String position, String sql, String params) {
         if (exceptionLogger != null) {
-            exceptionLogger.log(e);
+            exceptionLogger.log(e, position, sql, params);
         }
     }
 

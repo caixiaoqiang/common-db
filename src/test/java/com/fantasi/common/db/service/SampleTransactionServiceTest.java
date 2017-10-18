@@ -17,9 +17,10 @@ public class SampleTransactionServiceTest extends TestCase {
 				"admin");
 
 		pool.setExceptionLogger(new DBPool.ExceptionLogger() {
-			public void log(Exception e) {
-				System.out.println("error:" + e);
-//                    logger.error(e);
+			@Override
+			public void log(Exception e, String position, String sql, String params) {
+				System.out.println(e);
+				System.out.println(position);
 			}
 		});
 

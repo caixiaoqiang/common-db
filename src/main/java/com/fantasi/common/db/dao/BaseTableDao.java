@@ -62,7 +62,7 @@ public class BaseTableDao extends BaseDao {
 			return insertTable(conn, table, data);
 		} catch (Exception e) {
 			logger.error("insert错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, "insertTable", null);
 		} finally {
 			try {
 				if (conn != null) {
@@ -92,7 +92,7 @@ public class BaseTableDao extends BaseDao {
 			return result;
 		} catch (Exception e) {
 			logger.error("insert错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, "insertTable", null);
 		} finally {
 			try {
 				if (conn != null) {
@@ -121,13 +121,15 @@ public class BaseTableDao extends BaseDao {
 		if (data == null) {
 			return 0;
 		}
+		String sql = "";
+		String[] params = null;
 		Connection conn = null;
 		try {
 			conn = pool.getConnection();
 			conn.setAutoCommit(false);
 			String columnStr = "";
 			String valueStr = "";
-			String[] params = new String[data.keySet().size()];
+			params = new String[data.keySet().size()];
 			int index = 0;
 			for (String key : data.keySet()) {
 				columnStr += '`' + key + "`,";
@@ -137,7 +139,7 @@ public class BaseTableDao extends BaseDao {
 			columnStr = columnStr.substring(0, columnStr.length() - 1);
 			valueStr = valueStr.substring(0, valueStr.length() - 1);
 	
-			String sql = "insert into " + table + "(" + columnStr + ")"
+			sql = "insert into " + table + "(" + columnStr + ")"
 					+ " values (" + valueStr + ");";
 			DBHelper.execute(conn, sql, params);
 			Map<String, String> map = DBHelper.queryForMap(conn, "SELECT LAST_INSERT_ID() as id;");
@@ -146,7 +148,7 @@ public class BaseTableDao extends BaseDao {
 		
 		} catch (Exception e) {
 			logger.error("insertTableAndReturn错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, sql, params);
 		} finally {
 			try {
 				if (conn != null) {
@@ -238,7 +240,7 @@ public class BaseTableDao extends BaseDao {
 			return result;
 		} catch (Exception e) {
 			logger.error("update错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, "updateTable", null);
 		} finally {
 			try {
 				if (conn != null) {
@@ -320,7 +322,7 @@ public class BaseTableDao extends BaseDao {
 			return updateTable(conn, table, filters, whereClause, params, data);
 		} catch (Exception e) {
 			logger.error("update错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, "updateTable", null);
 		} finally {
 			try {
 				if (conn != null) {
@@ -345,7 +347,7 @@ public class BaseTableDao extends BaseDao {
 			return updateTable(conn, table, whereClause, params, data);
 		} catch (Exception e) {
 			logger.error("update错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, "updateTable", null);
 		} finally {
 			try {
 				if (conn != null) {
@@ -392,7 +394,7 @@ public class BaseTableDao extends BaseDao {
 			return replaceTable(conn, table, data);
 		} catch (Exception e) {
 			logger.error("replace错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, "replaceTable", null);
 		} finally {
 			try {
 				if (conn != null) {
@@ -422,7 +424,7 @@ public class BaseTableDao extends BaseDao {
 			return result;
 		} catch (Exception e) {
 			logger.error("replace错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, "replaceTable", null);
 		} finally {
 			try {
 				if (conn != null) {
@@ -450,7 +452,7 @@ public class BaseTableDao extends BaseDao {
 			return this.deleteTable(conn, table, filters);
 		} catch (Exception e) {
 			logger.error("deleteTable wrong:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, "deleteTable", null);
 		} finally {
 			try {
 				if (conn != null) {
@@ -471,7 +473,7 @@ public class BaseTableDao extends BaseDao {
 			return this.deleteTable(conn, table, whereClause, params);
 		} catch (Exception e) {
 			logger.error("delete错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, "deleteTable", null);
 		} finally {
 			try {
 				if (conn != null) {
@@ -618,14 +620,13 @@ public class BaseTableDao extends BaseDao {
 	
 	public List<Map<String, String>> queryTable(String table) {
 		Connection conn = null;
+		String sql = "select * from " + table ;
 		try {
 			conn = pool.getConnection();
-			String sql = "select * from " +
-					table ;
 			return DBHelper.query(conn, sql, null);
 		}  catch (Exception e) {
 			logger.error("query错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, sql, null);
 		} finally {
 			try {
 				if (conn != null) {
