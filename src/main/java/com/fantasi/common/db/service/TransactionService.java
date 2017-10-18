@@ -4,11 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.fantasi.common.db.IDBPool;
+import com.fantasi.common.db.dao.PrintStackDao;
 
 
-public abstract class TransactionService {
-	protected IDBPool pool = null;
-	
+public abstract class TransactionService extends PrintStackDao{
 	public TransactionService() {
 		
 	}
@@ -50,7 +49,7 @@ public abstract class TransactionService {
 			
 			return t;
 		} catch (Exception e) {
-			pool.exceptionCallback(e);
+			printCallStack(e, "procedure", null);
 			if (conn != null) {
 				try {
 					conn.rollback();

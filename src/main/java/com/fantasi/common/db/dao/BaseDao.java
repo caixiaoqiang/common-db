@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 
 import com.fantasi.common.db.IDBPool;
 
-public class BaseDao {
+public class BaseDao extends PrintStackDao{
 	private final static Logger logger = Logger.getLogger(BaseDao.class);
-	protected IDBPool pool = null;
+
 	
 	public BaseDao() {}
 	public BaseDao(IDBPool pool) {
@@ -26,25 +26,6 @@ public class BaseDao {
 	
 	public IDBPool getDBPool() {
 		return this.pool;
-	}
-	
-	
-	protected void printCallStack(Exception e) {
-		this.pool.exceptionCallback(e);
-		 StackTraceElement[] stackElements = e.getStackTrace();
-		 StringBuffer sb = new StringBuffer();
-		 if (stackElements != null) {
-			 for (int i = 0; i < stackElements.length; i++) {
-				 String className = stackElements[i].getClassName();
-				 if (className.contains("com.fantasi")) {
-					 sb.append(stackElements[i].getClassName()+"\t");
-//					 sb.append(stackElements[i].getFileName()+"\t");
-					 sb.append(stackElements[i].getLineNumber()+"\t");
-					 sb.append(stackElements[i].getMethodName() + "\n");	 
-				 }
-			 }
-			 logger.error(sb.toString());
-	     }
 	}
 	
 	/**
@@ -69,7 +50,7 @@ public class BaseDao {
 			return DBHelper.execute(conn, sql, params);
 		} catch (SQLException e) {
 			logger.error("execute错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, sql, params);
 		} finally {
 			try {
 				if (conn != null) {
@@ -134,7 +115,7 @@ public class BaseDao {
 			return DBHelper.queryForInt(conn, sql, params);
 		} catch (SQLException e) {
 			logger.error("rawQueryForInt错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, sql, params);
 		} finally {
 			try {
 				if (conn != null) {
@@ -171,7 +152,7 @@ public class BaseDao {
 			return DBHelper.queryForLong(conn, sql, params);
 		} catch (SQLException e) {
 			logger.error("rawQueryForInt错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, sql, params);
 		} finally {
 			try {
 				if (conn != null) {
@@ -199,7 +180,7 @@ public class BaseDao {
 			return DBHelper.queryForString(conn, sql, params);
 		} catch (SQLException e) {
 			logger.error("rawQueryForString:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, sql, params);
 		} finally {
 			try {
 				if (conn != null) {
@@ -236,7 +217,7 @@ public class BaseDao {
 			return DBHelper.query(conn, sql, params);
 		} catch (SQLException e) {
 			logger.error("rawQuery错误:" + e.getLocalizedMessage());
-			printCallStack(e);
+			printCallStack(e, sql, params);
 		} finally {
 			try {
 				if (conn != null) {
