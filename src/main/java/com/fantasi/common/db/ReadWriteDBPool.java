@@ -47,9 +47,4 @@ public class ReadWriteDBPool extends LoggerDBPool implements IDBPool{
     public void close() throws SQLException {
 
     }
-
-    @Override
-    public void exceptionCallback(Exception e) {
-
-    }
 }
