@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.fantasi.common.db.process.SqlParam;
 import org.apache.log4j.Logger;
 
 import com.fantasi.common.db.IDBPool;
@@ -33,36 +34,27 @@ public class BaseTableDao extends BaseDao {
 		if (data == null) {
 			return 0;
 		}
-		
-		String columnStr = "";
-		String valueStr = "";
-		String[] params = new String[data.keySet().size()];
-		int index = 0;
-		for (String key : data.keySet()) {
-			columnStr += '`' + key + "`,";
-			valueStr += "?,";
-			params[index++] = data.get(key);
-		}
-		columnStr = columnStr.substring(0, columnStr.length() - 1);
-		valueStr = valueStr.substring(0, valueStr.length() - 1);
-
-		String sql = "insert into " + table + "(" + columnStr + ")"
-				+ " values (" + valueStr + ");";
-
-		return DBHelper.execute(conn, sql, params);
+		SqlParam sqlParam = SqlParam.getSqlParam(table, data);
+		return DBHelper.execute(conn, sqlParam.getSql(), sqlParam.getParams());
 	}
 	
 	public int insertTable(String table, Map<String, String> data) {
 		if (data == null) {
 			return 0;
 		}
+		SqlParam sqlParam = null;
 		Connection conn = null;
 		try {
 			conn = pool.getConnection();
-			return insertTable(conn, table, data);
+			sqlParam = SqlParam.getSqlParam(table, data);
+			return DBHelper.execute(conn, sqlParam.getSql(), sqlParam.getParams());
 		} catch (Exception e) {
 			logger.error("insert错误:" + e.getLocalizedMessage());
-			printCallStack(e, "insertTable", null);
+			if (sqlParam == null) {
+				printCallStack(e, "insertTable", null);
+			} else {
+				printCallStack(e, sqlParam.getSql(), sqlParam.getParams());
+			}
 		} finally {
 			try {
 				if (conn != null) {
@@ -81,18 +73,25 @@ public class BaseTableDao extends BaseDao {
 			return 0;
 		}
 		Connection conn = null;
+
+		SqlParam sqlParam = null;
 		try {
 			conn = pool.getConnection();
 			conn.setAutoCommit(false);
 			int result = 0;
 			for (Map<String, String> map : datas) {
-				result += this.insertTable(conn, table, map);
+				sqlParam = SqlParam.getSqlParam(table, map);
+				result += DBHelper.execute(conn, sqlParam.getSql(), sqlParam.getParams());
 			}
 			conn.commit();
 			return result;
 		} catch (Exception e) {
 			logger.error("insert错误:" + e.getLocalizedMessage());
-			printCallStack(e, "insertTable", null);
+			if (sqlParam == null) {
+				printCallStack(e, "insertTable", null);
+			} else {
+				printCallStack(e, sqlParam.getSql(), sqlParam.getParams());
+			}
 		} finally {
 			try {
 				if (conn != null) {

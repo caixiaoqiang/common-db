@@ -3,13 +3,14 @@ package com.fantasi.common.db.exceptionlogger;
 import com.fantasi.common.db.DBPool;
 import com.fantasi.common.db.codegenerator.BeanGeneratorTest;
 import com.fantasi.common.db.dao.BaseDao;
+import com.fantasi.common.db.dao.BaseTableDao;
 import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by zhangyouce on 2017/10/10.
@@ -46,5 +47,19 @@ public class ExceptionLoggerTest  extends TestCase {
         BaseDao baseDao = new BaseDao(pool);
 
         baseDao.execute("insert into test(id) values(1)");
+
+        BaseTableDao baseTableDao = new BaseTableDao(pool);
+
+        Map<String, String> data = new HashMap<>();
+        data.put("id", "1");
+
+        List<Map<String, String>> datas = new ArrayList<>();
+        datas.add(data);
+
+        baseTableDao.insertTable("test", data);
+
+
+        baseTableDao.insertTable("test", datas);
+
     }
 }
