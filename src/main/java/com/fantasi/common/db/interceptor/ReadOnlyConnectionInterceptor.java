@@ -5,6 +5,7 @@ import com.fantasi.common.db.annotation.ReadOnlyConnection;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +15,16 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class ReadOnlyConnectionInterceptor implements Ordered {
-    @Around("@annotation(readOnlyConnection)")
-    public Object proceed(ProceedingJoinPoint proceedingJoinPoint, ReadOnlyConnection readOnlyConnection) throws Throwable {
+
+    @Pointcut("execution(public * com.fantasi.common.db.dao.BaseDao.rawQuer*(..))")
+    public void queryAspect() {
+    }
+
+//    @Around("@annotation(com.fantasi.common.db.annotation.ReadOnlyConnection)")
+    @Around("queryAspect()")
+    public Object proceed(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         try {
-//                logger.info("set database connection to read only");
+//            System.out.println("set read only connection");
             DbContextHolder.setDbType(DbContextHolder.DbType.SLAVE);
             Object result = proceedingJoinPoint.proceed();
             return result;

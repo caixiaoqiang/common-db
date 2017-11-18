@@ -33,6 +33,7 @@ public class ReadWriteDBPool extends LoggerDBPool implements IDBPool{
 
     @Override
     public Connection getConnection() throws SQLException {
+        System.out.println(DbContextHolder.getDbType());
         if (DbContextHolder.getDbType() == DbContextHolder.DbType.MASTER) {
             return writeDataSource.getConnection();
         } else {
