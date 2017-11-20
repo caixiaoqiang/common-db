@@ -16,15 +16,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReadOnlyConnectionInterceptor implements Ordered {
 
-    @Pointcut("execution(public * com.fantasi.common.db.dao.BaseDao.rawQuer*(..))")
+//    @Pointcut("execution(public * com.fantasi.common.db.dao.BaseDao.rawQuer*(..))")
+//    @Pointcut("execution(* com.fantasi.common.db.dao.DBHelper.*(..))")
+    @Pointcut("@annotation(com.fantasi.common.db.annotation.ReadOnlyConnection)")
     public void queryAspect() {
     }
 
-//    @Around("@annotation(com.fantasi.common.db.annotation.ReadOnlyConnection)")
+
     @Around("queryAspect()")
     public Object proceed(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         try {
-//            System.out.println("set read only connection");
+            System.out.println("set read only connection");
             DbContextHolder.setDbType(DbContextHolder.DbType.SLAVE);
             Object result = proceedingJoinPoint.proceed();
             return result;
