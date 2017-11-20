@@ -3,10 +3,10 @@
 	<parent>
 		<groupId>com.fantasi</groupId>
 		<artifactId>common-pom</artifactId>
-		<version>0.0.4</version>
+		<version>0.0.7</version>
 	</parent>
 	<artifactId>common-db</artifactId>
-	<version>1.0.9-SNAPSHOT</version>
+	<version>1.1.1-SNAPSHOT</version>
 	
 	<properties>
 		<commons-dbcp.version>1.4</commons-dbcp.version>

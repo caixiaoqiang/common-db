@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.fantasi.common.db.process.SqlParam;
-import org.apache.log4j.Logger;
 
 import com.fantasi.common.db.IDBPool;
 import com.fantasi.common.db.process.Filter;
 import com.fantasi.common.db.process.SelectParam;
 
 public class BaseTableDao extends BaseDao {
-	private final static Logger logger = Logger.getLogger(BaseTableDao.class);
+
 	protected String[] primaryKeys;
 	
 	public BaseTableDao(IDBPool pool) {
@@ -49,7 +48,6 @@ public class BaseTableDao extends BaseDao {
 			sqlParam = SqlParam.getSqlParam(table, data);
 			return DBHelper.execute(conn, sqlParam.getSql(), sqlParam.getParams());
 		} catch (Exception e) {
-			logger.error("insert错误:" + e.getLocalizedMessage());
 			if (sqlParam == null) {
 				printCallStack(e, "insertTable", null);
 			} else {
@@ -86,7 +84,6 @@ public class BaseTableDao extends BaseDao {
 			conn.commit();
 			return result;
 		} catch (Exception e) {
-			logger.error("insert错误:" + e.getLocalizedMessage());
 			if (sqlParam == null) {
 				printCallStack(e, "insertTable", null);
 			} else {
@@ -146,7 +143,6 @@ public class BaseTableDao extends BaseDao {
 			return Integer.parseInt(map.get("id"));
 		
 		} catch (Exception e) {
-			logger.error("insertTableAndReturn错误:" + e.getLocalizedMessage());
 			printCallStack(e, sql, params);
 		} finally {
 			try {
@@ -238,7 +234,6 @@ public class BaseTableDao extends BaseDao {
 			conn.commit();
 			return result;
 		} catch (Exception e) {
-			logger.error("update错误:" + e.getLocalizedMessage());
 			printCallStack(e, "updateTable", null);
 		} finally {
 			try {
@@ -320,7 +315,6 @@ public class BaseTableDao extends BaseDao {
 			conn = pool.getConnection();
 			return updateTable(conn, table, filters, whereClause, params, data);
 		} catch (Exception e) {
-			logger.error("update错误:" + e.getLocalizedMessage());
 			printCallStack(e, "updateTable", null);
 		} finally {
 			try {
@@ -345,7 +339,6 @@ public class BaseTableDao extends BaseDao {
 			conn = pool.getConnection();
 			return updateTable(conn, table, whereClause, params, data);
 		} catch (Exception e) {
-			logger.error("update错误:" + e.getLocalizedMessage());
 			printCallStack(e, "updateTable", null);
 		} finally {
 			try {
@@ -392,7 +385,6 @@ public class BaseTableDao extends BaseDao {
 			conn = pool.getConnection();
 			return replaceTable(conn, table, data);
 		} catch (Exception e) {
-			logger.error("replace错误:" + e.getLocalizedMessage());
 			printCallStack(e, "replaceTable", null);
 		} finally {
 			try {
@@ -422,7 +414,6 @@ public class BaseTableDao extends BaseDao {
 			conn.commit();
 			return result;
 		} catch (Exception e) {
-			logger.error("replace错误:" + e.getLocalizedMessage());
 			printCallStack(e, "replaceTable", null);
 		} finally {
 			try {
@@ -450,7 +441,6 @@ public class BaseTableDao extends BaseDao {
 			conn = pool.getConnection();
 			return this.deleteTable(conn, table, filters);
 		} catch (Exception e) {
-			logger.error("deleteTable wrong:" + e.getLocalizedMessage());
 			printCallStack(e, "deleteTable", null);
 		} finally {
 			try {
@@ -471,7 +461,6 @@ public class BaseTableDao extends BaseDao {
 			conn = pool.getConnection();
 			return this.deleteTable(conn, table, whereClause, params);
 		} catch (Exception e) {
-			logger.error("delete错误:" + e.getLocalizedMessage());
 			printCallStack(e, "deleteTable", null);
 		} finally {
 			try {
@@ -624,7 +613,6 @@ public class BaseTableDao extends BaseDao {
 			conn = pool.getConnection();
 			return DBHelper.query(conn, sql, null);
 		}  catch (Exception e) {
-			logger.error("query错误:" + e.getLocalizedMessage());
 			printCallStack(e, sql, null);
 		} finally {
 			try {

@@ -1,19 +1,15 @@
 package com.fantasi.common.db.dao;
 
+import com.fantasi.common.db.IDBPool;
+import com.fantasi.common.db.annotation.ReadOnlyConnection;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.fantasi.common.db.annotation.ReadOnlyConnection;
-import org.apache.log4j.Logger;
-
-import com.fantasi.common.db.IDBPool;
-
 public class BaseDao extends PrintStackDao{
-	private final static Logger logger = Logger.getLogger(BaseDao.class);
-
 	
 	public BaseDao() {}
 	public BaseDao(IDBPool pool) {
@@ -49,7 +45,6 @@ public class BaseDao extends PrintStackDao{
 			conn = this.pool.getConnection();
 			return DBHelper.execute(conn, sql, params);
 		} catch (SQLException e) {
-			logger.error("execute错误:" + e.getLocalizedMessage());
 			printCallStack(e, sql, params);
 		} finally {
 			try {
@@ -114,7 +109,6 @@ public class BaseDao extends PrintStackDao{
 			conn = this.pool.getConnection();
 			return DBHelper.queryForInt(conn, sql, params);
 		} catch (SQLException e) {
-			logger.error("rawQueryForInt错误:" + e.getLocalizedMessage());
 			printCallStack(e, sql, params);
 		} finally {
 			try {
@@ -151,7 +145,6 @@ public class BaseDao extends PrintStackDao{
 			conn = this.pool.getConnection();
 			return DBHelper.queryForLong(conn, sql, params);
 		} catch (SQLException e) {
-			logger.error("rawQueryForInt错误:" + e.getLocalizedMessage());
 			printCallStack(e, sql, params);
 		} finally {
 			try {
@@ -179,7 +172,6 @@ public class BaseDao extends PrintStackDao{
 			conn = this.pool.getConnection();
 			return DBHelper.queryForString(conn, sql, params);
 		} catch (SQLException e) {
-			logger.error("rawQueryForString:" + e.getLocalizedMessage());
 			printCallStack(e, sql, params);
 		} finally {
 			try {
@@ -216,7 +208,6 @@ public class BaseDao extends PrintStackDao{
 			conn = this.pool.getConnection();
 			return DBHelper.query(conn, sql, params);
 		} catch (SQLException e) {
-			logger.error("rawQuery错误:" + e.getLocalizedMessage());
 			printCallStack(e, sql, params);
 		} finally {
 			try {

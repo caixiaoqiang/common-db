@@ -5,7 +5,6 @@ import com.fantasi.common.db.codegenerator.BeanGeneratorTest;
 import com.fantasi.common.db.dao.BaseDao;
 import com.fantasi.common.db.dao.BaseTableDao;
 import junit.framework.TestCase;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +15,7 @@ import java.util.*;
  * Created by zhangyouce on 2017/10/10.
  */
 public class ExceptionLoggerTest  extends TestCase {
-    private final static Logger logger = Logger.getLogger(ExceptionLoggerTest.class);
+
     DBPool pool = new DBPool();
     public void setUp() {
         Properties props = new Properties();

@@ -3,12 +3,11 @@ package com.fantasi.common.db.task;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.log4j.Logger;
 
 import com.fantasi.common.db.DBPool;
 
 public class CheckDBConnectionTask {
-	private static Logger logger = Logger.getLogger(CheckDBConnectionTask.class);
+
 	
 	private DBPool pool = null;
 	private long refreshInterval = 10 * 1000;
@@ -37,7 +36,7 @@ public class CheckDBConnectionTask {
 		TimerTask printTask = new TimerTask() {
 			@Override
 			public void run() {
-				logger.info(sb.toString());
+//				logger.info(sb.toString());
 				sb.setLength(0);
 			}
 		};

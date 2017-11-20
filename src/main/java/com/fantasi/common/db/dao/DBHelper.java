@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 public class DBHelper {
-	private final static Logger logger = Logger.getLogger(DBHelper.class);
+//	private final static Logger logger = Logger.getLogger(DBHelper.class);
 	
 	private DBHelper() {}
 	
@@ -23,7 +23,7 @@ public class DBHelper {
 	
 	public static int execute(Connection conn, String sql, String[] params) throws SQLException {
 		PreparedStatement stat = null;
-		logger.debug("execute,sql=" + sql);
+//		logger.debug("execute,sql=" + sql);
 		stat = conn.prepareStatement(sql);
 		if (params != null) {
 			int index = 1;
@@ -42,7 +42,7 @@ public class DBHelper {
 		ResultSet rs = null;
 		PreparedStatement stat = null;
 		try {
-			logger.debug("query,sql=" + sql);
+//			logger.debug("query,sql=" + sql);
 			stat = conn.prepareStatement(sql);
 			if (params != null) {
 				int index = 1;
@@ -69,7 +69,7 @@ public class DBHelper {
 		ResultSet rs = null;
 		PreparedStatement stat = null;
 		try {
-			logger.debug("query,sql=" + sql);
+//			logger.debug("query,sql=" + sql);
 			stat = conn.prepareStatement(sql);
 			if (params != null) {
 				int index = 1;
@@ -97,7 +97,7 @@ public class DBHelper {
 		ResultSet rs = null;
 		PreparedStatement stat = null;
 		try {
-			logger.debug("query,sql=" + sql);
+//			logger.debug("query,sql=" + sql);
 			stat = conn.prepareStatement(sql);
 			if (params != null) {
 				int index = 1;
@@ -143,7 +143,7 @@ public class DBHelper {
 		PreparedStatement stat = null;
 		try {
 //			rs = getResultSet(conn, sql, params);
-			logger.debug("query,sql=" + sql);
+//			logger.debug("query,sql=" + sql);
 			stat = conn.prepareStatement(sql);
 			if (params != null) {
 				int index = 1;
@@ -179,7 +179,7 @@ public class DBHelper {
 	private static ResultSet getResultSet(Connection conn, String sql, String[] params) throws SQLException {
 		PreparedStatement stat = null;
 		try {
-			logger.debug("query,sql=" + sql);
+//			logger.debug("query,sql=" + sql);
 			stat = conn.prepareStatement(sql);
 			if (params != null) {
 				int index = 1;

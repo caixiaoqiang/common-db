@@ -26,7 +26,7 @@ public class ReadOnlyConnectionInterceptor implements Ordered {
     @Around("queryAspect()")
     public Object proceed(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         try {
-            System.out.println("set read only connection");
+//            System.out.println("set read only connection");
             DbContextHolder.setDbType(DbContextHolder.DbType.SLAVE);
             Object result = proceedingJoinPoint.proceed();
             return result;

@@ -5,13 +5,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
 
 import com.fantasi.common.db.task.CheckDBConnectionTask;
 
 public class DBPoolFactory {
-	
-	private static Logger logger = Logger.getLogger(DBPoolFactory.class);
+
 	
 
 	public static DBPool getWebDefautDBPool() {
@@ -20,7 +18,6 @@ public class DBPoolFactory {
 			String path = url.getPath();
 			return initFromProperties(path);
 		}
-		logger.error("getWebDefautDBPool:找不到jdbc.properties");
 		return null;
 	}
 	
@@ -48,18 +45,17 @@ public class DBPoolFactory {
 			if (props.getProperty("jdbc.log.printInterval") != null) {
 				printInterval = Integer.parseInt(props.getProperty("jdbc.log.printInterval").trim());
 			}
-			logger.info("初始化数据库" + connectURI + "," + username + "," + password);
+
 			DBPool pool = new DBPool();
 			pool.init(driver, connectURI, username, password);
 			
 			if (enable) {
-				logger.info("初始化数据库连接信息,refreshInterval=" + (refreshInterval/1000) + "秒,printInterval=" + (printInterval/60000) + "分");	
 				CheckDBConnectionTask task = new CheckDBConnectionTask(pool, refreshInterval, printInterval);
 				task.start();
 			}
 			return pool;
 		} catch (IOException e) {
-			logger.error("初始化数据库失败:" + e.getLocalizedMessage());
+
 		}
 		return null;
 	}

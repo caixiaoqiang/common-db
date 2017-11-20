@@ -1,13 +1,11 @@
 package com.fantasi.common.db.dao;
 
 import com.fantasi.common.db.IDBPool;
-import org.apache.log4j.Logger;
 
 /**
  * Created by zhangyouce on 2017/10/18.
  */
 public abstract class PrintStackDao {
-    private final static Logger logger = Logger.getLogger(PrintStackDao.class);
     protected IDBPool pool = null;
     protected void printCallStack(Exception e, String sql, String[] params) {
 
@@ -23,7 +21,6 @@ public abstract class PrintStackDao {
                     sb.append(stackElements[i].getMethodName() + "\n");
                 }
             }
-            logger.error(sb.toString());
         }
 
         StringBuffer sb2 = new StringBuffer();
