@@ -30,12 +30,18 @@ public class ExceptionLoggerTest  extends TestCase {
             pool.init(driver, connectURI, username, password);
 
 
-            pool.setExceptionLogger(new DBPool.ExceptionLogger() {
+            pool.setExceptionLogger(new DBPool.IDBLogger() {
                 @Override
-                public void log(Exception e, String position, String sql, String params) {
+                public void logException(Exception e, String position, String sql, String[] params) {
                     System.out.println(e);
                     System.out.println(position);
                 }
+
+                @Override
+                public void logSql(String sql, String[] params) {
+
+                }
+
             });
 
         } catch (IOException e) {

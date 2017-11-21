@@ -1,8 +1,7 @@
 package com.fantasi.common.db.service;
 
-import junit.framework.TestCase;
-
 import com.fantasi.common.db.DBPool;
+import junit.framework.TestCase;
 
 public class SampleTransactionServiceTest extends TestCase {
 	
@@ -16,11 +15,16 @@ public class SampleTransactionServiceTest extends TestCase {
 				"root",
 				"admin");
 
-		pool.setExceptionLogger(new DBPool.ExceptionLogger() {
+		pool.setExceptionLogger(new DBPool.IDBLogger() {
 			@Override
-			public void log(Exception e, String position, String sql, String params) {
+			public void logException(Exception e, String position, String sql, String[] params) {
 				System.out.println(e);
 				System.out.println(position);
+			}
+
+			@Override
+			public void logSql(String sql, String[] params) {
+
 			}
 		});
 

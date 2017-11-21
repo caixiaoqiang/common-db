@@ -81,6 +81,7 @@ public class DBPool extends LoggerDBPool implements IDBPool{
 
 
 
+
 	public String getConnectionInfo() {
 		BasicDataSource ds = (BasicDataSource)dataSource;
 		return "[" + ds.getNumActive() + "," + ds.getNumIdle() + "]";

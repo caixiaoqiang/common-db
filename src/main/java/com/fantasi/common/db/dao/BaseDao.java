@@ -43,7 +43,7 @@ public class BaseDao extends PrintStackDao{
 		Connection conn = null;
 		try {
 			conn = this.pool.getConnection();
-			return DBHelper.execute(conn, sql, params);
+			return this.execute(conn, sql, params);
 		} catch (SQLException e) {
 			printCallStack(e, sql, params);
 		} finally {
@@ -60,6 +60,7 @@ public class BaseDao extends PrintStackDao{
 	}
 	
 	public int execute(Connection conn, String sql, String[] params) throws SQLException {
+		this.pool.logSql(sql, params);
 		return DBHelper.execute(conn, sql, params);
 	}
 	
@@ -107,6 +108,7 @@ public class BaseDao extends PrintStackDao{
 		Connection conn = null;
 		try {
 			conn = this.pool.getConnection();
+			this.pool.logSql(sql, params);
 			return DBHelper.queryForInt(conn, sql, params);
 		} catch (SQLException e) {
 			printCallStack(e, sql, params);
@@ -143,6 +145,7 @@ public class BaseDao extends PrintStackDao{
 		Connection conn = null;
 		try {
 			conn = this.pool.getConnection();
+			this.pool.logSql(sql, params);
 			return DBHelper.queryForLong(conn, sql, params);
 		} catch (SQLException e) {
 			printCallStack(e, sql, params);
@@ -170,6 +173,7 @@ public class BaseDao extends PrintStackDao{
 		Connection conn = null;
 		try {
 			conn = this.pool.getConnection();
+			this.pool.logSql(sql, params);
 			return DBHelper.queryForString(conn, sql, params);
 		} catch (SQLException e) {
 			printCallStack(e, sql, params);
@@ -206,6 +210,7 @@ public class BaseDao extends PrintStackDao{
 		Connection conn = null;
 		try {
 			conn = this.pool.getConnection();
+			this.pool.logSql(sql, params);
 			return DBHelper.query(conn, sql, params);
 		} catch (SQLException e) {
 			printCallStack(e, sql, params);
