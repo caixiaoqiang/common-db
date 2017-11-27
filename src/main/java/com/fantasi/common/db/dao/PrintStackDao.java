@@ -14,13 +14,13 @@ public abstract class PrintStackDao {
         if (stackElements != null) {
             for (int i = 0; i < stackElements.length; i++) {
                 String className = stackElements[i].getClassName();
-                if (className.contains("com.fantasi")) {
+                if (className.startsWith(this.pool.getExceptionPackageName())) {
                     sb.append(stackElements[i].getClassName()+"\t");
                     sb.append(stackElements[i].getLineNumber()+"\t");
                     sb.append(stackElements[i].getMethodName() + "\n");
                 }
             }
         }
-        this.pool.exceptionCallback(e, sb.toString(), sql, params);
+        this.pool.logException(e, sb.toString(), sql, params);
     }
 }
