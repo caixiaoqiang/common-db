@@ -2,6 +2,7 @@ package com.fantasi.common.db.dao;
 
 import com.fantasi.common.db.IDBPool;
 import com.fantasi.common.db.annotation.ReadOnlyConnection;
+import com.fantasi.common.db.service.UpdateNoneException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -63,7 +64,17 @@ public class BaseDao extends PrintStackDao{
 		this.pool.logSql(sql, params);
 		return DBHelper.execute(conn, sql, params);
 	}
-	
+
+	public int executeWithException(Connection conn, String sql, String[] params) throws SQLException {
+		this.pool.logSql(sql, params);
+		int result = DBHelper.execute(conn, sql, params);
+		if (result < 1) {
+			throw new UpdateNoneException("update none");
+		}
+		return result;
+	}
+
+
 	/**
 	 * 查询
 	 * @param sql
