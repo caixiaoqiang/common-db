@@ -115,7 +115,7 @@ public class BaseDao extends PrintStackDao{
 		return DBHelper.executeObject(conn, sql, params);
 	}
 
-	public int executeObjectWithException(Connection conn, String sql, String[] params) throws SQLException {
+	public int executeObjectWithException(Connection conn, String sql, Object[] params) throws SQLException {
 		this.pool.logSql(sql, convertObject(params));
 		int result = DBHelper.execute(conn, sql, params);
 		if (result < 1) {
