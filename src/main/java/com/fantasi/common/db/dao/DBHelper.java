@@ -1,5 +1,6 @@
 package com.fantasi.common.db.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +21,27 @@ public class DBHelper {
 	public static int execute(Connection conn, String sql) throws SQLException {
 		return execute(conn, sql, null);
 	}
+
+	public static int executeObject(Connection conn, String sql, Object[] params) throws SQLException {
+		PreparedStatement stat = null;
+//		logger.debug("execute,sql=" + sql);
+		stat = conn.prepareStatement(sql);
+		if (params != null) {
+			int index = 1;
+			for (Object param : params) {
+
+				if (param instanceof BigDecimal) {
+					stat.setBigDecimal(index++, (BigDecimal) param);
+				} else if (param instanceof Double) {
+					stat.setDouble(index++, (Double) param);
+				} else {
+					stat.setString(index++, param.toString());
+				}
+			}
+		}
+		return stat.executeUpdate();
+	}
+
 	
 	public static int execute(Connection conn, String sql, String[] params) throws SQLException {
 		PreparedStatement stat = null;

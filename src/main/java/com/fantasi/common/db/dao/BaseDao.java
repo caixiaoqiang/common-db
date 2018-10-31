@@ -76,6 +76,56 @@ public class BaseDao extends PrintStackDao{
 
 
 	/**
+	 * 执行一条sql语句
+	 * @param sql
+	 * @return 返回影响行数
+	 */
+	public int executeObject(String sql) {
+		return this.executeObject(sql, null);
+	}
+
+	/**
+	 * 执行一条sql语句
+	 * @param sql
+	 * @param params
+	 * @return 返回影响行数
+	 */
+	public int executeObject(String sql, Object[] params) {
+		Connection conn = null;
+		try {
+			conn = this.pool.getConnection();
+			return this.executeObject(conn, sql, params);
+		} catch (SQLException e) {
+			printObjectCallStack(e, sql, params);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+					conn = null;
+				}
+			} catch (SQLException e) {
+				//关闭数据库连接的时候出现异常了
+			}
+		}
+		return -1;
+	}
+
+	public int executeObject(Connection conn, String sql, Object[] params) throws SQLException {
+		this.pool.logSql(sql, convertObject(params));
+		return DBHelper.executeObject(conn, sql, params);
+	}
+
+	public int executeObjectWithException(Connection conn, String sql, String[] params) throws SQLException {
+		this.pool.logSql(sql, convertObject(params));
+		int result = DBHelper.execute(conn, sql, params);
+		if (result < 1) {
+			throw new UpdateNoneException("update none");
+		}
+		return result;
+	}
+
+
+	/**
 	 * 查询
 	 * @param sql
 	 * @return 当没有结果时返回 null
