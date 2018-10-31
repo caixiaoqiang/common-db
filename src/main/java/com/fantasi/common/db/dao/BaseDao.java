@@ -117,7 +117,7 @@ public class BaseDao extends PrintStackDao{
 
 	public int executeObjectWithException(Connection conn, String sql, Object[] params) throws SQLException {
 		this.pool.logSql(sql, convertObject(params));
-		int result = DBHelper.execute(conn, sql, params);
+		int result = DBHelper.executeObject(conn, sql, params);
 		if (result < 1) {
 			throw new UpdateNoneException("update none");
 		}
