@@ -1,7 +1,7 @@
 package com.fantasi.common.db;
 
 /**
- * Created by zhangyouce on 2017/10/10.
+ * Created by cxq on 2017/10/10.
  */
 public abstract class LoggerDBPool implements IDBPool{
     private ISqlLogger logger = null;

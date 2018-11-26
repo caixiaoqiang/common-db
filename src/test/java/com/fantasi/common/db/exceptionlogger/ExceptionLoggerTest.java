@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Created by zhangyouce on 2017/10/10.
+ * Created by cxq on 2017/10/10.
  */
 public class ExceptionLoggerTest  extends TestCase {
 

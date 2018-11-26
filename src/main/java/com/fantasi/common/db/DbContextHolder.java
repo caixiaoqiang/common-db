@@ -1,7 +1,7 @@
 package com.fantasi.common.db;
 
 /**
- * Created by zhangyouce on 2017/6/8.
+ * Created by cxq on 2017/6/8.
  */
 public class DbContextHolder {
     public enum DbType {

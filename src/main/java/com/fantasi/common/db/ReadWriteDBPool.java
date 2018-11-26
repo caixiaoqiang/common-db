@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created by zhangyouce on 2017/6/8.
+ * Created by cxq on 2017/6/8.
  */
 public class ReadWriteDBPool extends LoggerDBPool implements IDBPool{
 

@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by zhangyouce on 2017/6/9.
+ * Created by cxq on 2017/6/9.
  */
 public abstract class BaseDictDaoService  <T extends Object> extends TransactionService {
 

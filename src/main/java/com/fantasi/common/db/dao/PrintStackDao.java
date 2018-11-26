@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by zhangyouce on 2017/10/18.
+ * Created by cxq on 2017/10/18.
  */
 public abstract class PrintStackDao {
     protected IDBPool pool = null;
